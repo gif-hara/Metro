@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Metro.ObjectPool;
+using UniRx;
 using UnityEngine;
 
 
@@ -8,6 +10,9 @@ namespace Metro.CharacterController
 {
 	public class Bullet : MonoBehaviour
 	{
+		[SerializeField]
+		private float destroyDuration;
+		
 		private Vector3 velocity;
 
 		private Transform cachedTransform;
@@ -26,9 +31,17 @@ namespace Metro.CharacterController
 		
 		public void Fire(Vector3 position, Vector2 velocity)
 		{
-			var instance = GetPool(this).Rent();
+			var pool = GetPool(this);
+			var instance = pool.Rent();
 			instance.cachedTransform.localPosition = position;
 			instance.velocity = velocity;
+
+			Observable.Timer(TimeSpan.FromSeconds(this.destroyDuration))
+				.TakeUntilDisable(instance)
+				.SubscribeWithState2(instance, pool, (l, _instance, _pool) =>
+				{
+					_pool.Return(_instance);
+				});
 		}
 
 		private static PoolableBullet GetPool(Bullet bullet)
