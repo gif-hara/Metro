@@ -20,6 +20,7 @@ namespace Metro.CharacterController
         {
             this.CachedTransform = this.transform;
             var modelInstance = Instantiate(this.model, this.CachedTransform);
+            modelInstance.transform.localPosition = Vector3.zero;
             
             this.Provider = new MessageBroker();
 

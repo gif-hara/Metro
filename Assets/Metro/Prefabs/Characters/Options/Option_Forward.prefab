@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 1887666467565054, guid: 8228467c4c6f74142bb678362ba2e30d, type: 2}
-  modelParent: {fileID: 1932857631946488}
+  modelParent: {fileID: 4577711572195456}
   muzzle: {fileID: 114822952040232776}
 --- !u!114 &114822952040232776
 MonoBehaviour:

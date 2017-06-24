@@ -356,6 +356,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 1470847185774734, guid: 4093fcd16f1f440758abf52ab9a58c84, type: 2}
+  options:
+  - {fileID: 114695612351259502, guid: 6ce14e57c47d14a1cbf152d508f12985, type: 2}
 --- !u!114 &1375718181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,7 +372,6 @@ MonoBehaviour:
   horizontalName: Horizontal
   verticalName: Vertical
   submitName: Jump
-  muzzles: []
 --- !u!114 &1375718182
 MonoBehaviour:
   m_ObjectHideFlags: 0
