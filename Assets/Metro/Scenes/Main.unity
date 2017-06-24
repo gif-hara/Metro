@@ -112,48 +112,6 @@ NavMeshSettings:
 Transform:
   m_PrefabParentObject: {fileID: 400004, guid: d024aaa09f4080d448d16f62d1a97b0b, type: 2}
   m_PrefabInternal: {fileID: 1379924398}
---- !u!1001 &598725980
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4613074053423036, guid: 8228467c4c6f74142bb678362ba2e30d, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 5.14
-      objectReference: {fileID: 0}
-    - target: {fileID: 4613074053423036, guid: 8228467c4c6f74142bb678362ba2e30d, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 6.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 4613074053423036, guid: 8228467c4c6f74142bb678362ba2e30d, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4613074053423036, guid: 8228467c4c6f74142bb678362ba2e30d, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4613074053423036, guid: 8228467c4c6f74142bb678362ba2e30d, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4613074053423036, guid: 8228467c4c6f74142bb678362ba2e30d, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4613074053423036, guid: 8228467c4c6f74142bb678362ba2e30d, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4613074053423036, guid: 8228467c4c6f74142bb678362ba2e30d, type: 2}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 8228467c4c6f74142bb678362ba2e30d, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1001 &899538184
 Prefab:
   m_ObjectHideFlags: 0
@@ -376,8 +334,8 @@ GameObject:
   - component: {fileID: 1375718187}
   - component: {fileID: 1375718184}
   - component: {fileID: 1375718183}
-  - component: {fileID: 1375718181}
   - component: {fileID: 1375718182}
+  - component: {fileID: 1375718181}
   m_Layer: 0
   m_Name: CharacterRobotBoy
   m_TagString: Player
@@ -544,7 +502,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4380936590278722, guid: 4093fcd16f1f440758abf52ab9a58c84, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4093fcd16f1f440758abf52ab9a58c84, type: 2}
