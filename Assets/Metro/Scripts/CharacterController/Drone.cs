@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UniRx;
+using UnityEngine;
 
 namespace Metro.CharacterController
 {
@@ -7,12 +9,24 @@ namespace Metro.CharacterController
         [SerializeField]
         private GameObject model;
 
-        private Transform cachedTransform;
+        [SerializeField]
+        private List<Option> options;
+
+        public Transform CachedTransform { private set; get; }
+        
+        public IMessageBroker Provider { private set; get; }
 
         void Awake()
         {
-            this.cachedTransform = this.transform;
-            var modelInstance = Instantiate(this.model, this.cachedTransform);
+            this.CachedTransform = this.transform;
+            var modelInstance = Instantiate(this.model, this.CachedTransform);
+            
+            this.Provider = new MessageBroker();
+
+            for (int i = 0; i < this.options.Count; i++)
+            {
+                this.options[i].Create(this);
+            }
         }
     }
 }
