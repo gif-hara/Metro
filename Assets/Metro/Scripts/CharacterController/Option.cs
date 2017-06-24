@@ -21,6 +21,7 @@ namespace Metro.CharacterController
             instance.transform.localPosition = Vector3.zero;
             var modelInstance = Instantiate(instance.model, instance.modelParent);
             modelInstance.transform.localPosition = Vector3.zero;
+            modelInstance.transform.localRotation = Quaternion.identity;
 
             drone.Provider.Receive<StartFire>()
                 .Where(_ => drone.isActiveAndEnabled)
