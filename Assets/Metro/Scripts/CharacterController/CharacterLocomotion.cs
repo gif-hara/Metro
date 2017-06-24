@@ -8,9 +8,6 @@ namespace Metro.CharacterController
     [RequireComponent(typeof(Rigidbody2D))]
     public class CharacterLocomotion : MonoBehaviour
     {
-        [SerializeField]
-        private float speed;
-        
         private Rigidbody2D rigidbody2D;
 
         private Transform cachedTransform;
@@ -34,9 +31,9 @@ namespace Metro.CharacterController
                 });
         }
 
-        public void Move(Vector2 direction)
+        public void Move(Vector2 velocity)
         {
-            this.velocity += direction * this.speed;
+            this.velocity += velocity;
         }
     }
 }

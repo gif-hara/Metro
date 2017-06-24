@@ -8,7 +8,6 @@ using UnityStandardAssets._2D;
 namespace Metro.CharacterController
 {
     [RequireComponent(typeof(Drone))]
-    [RequireComponent(typeof(CharacterLocomotion))]
     public class CharacterControllInput : MonoBehaviour
     {
         [SerializeField]
@@ -20,15 +19,16 @@ namespace Metro.CharacterController
         [SerializeField]
         private string submitName = "Submit";
 
-        private CharacterLocomotion locomotion;
+        // FIXME:
+        [SerializeField]
+        private float speed;
 
         private Drone drone;
 
+        private Vector2 cachedVelocity;
+
         void Awake()
         {
-            this.locomotion = this.GetComponent<CharacterLocomotion>();
-            Assert.IsNotNull(this.locomotion);
-
             this.drone = this.GetComponent<Drone>();
             Assert.IsNotNull(this.drone);
         }
@@ -37,7 +37,12 @@ namespace Metro.CharacterController
         {
             var horizontal = CrossPlatformInputManager.GetAxis(this.horizontalName);
             var vertical = CrossPlatformInputManager.GetAxis(this.verticalName);
-            this.locomotion.Move(new Vector2(horizontal, vertical));
+            this.cachedVelocity.Set(horizontal, vertical);
+
+            if (this.cachedVelocity.sqrMagnitude > 0.0f)
+            {
+                this.drone.Provider.Publish(Move.Get(this.cachedVelocity, this.speed));
+            }
 
             if (CrossPlatformInputManager.GetButtonDown(this.submitName))
             {
