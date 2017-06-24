@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Metro.Events.Character;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityStandardAssets.CrossPlatformInput;
@@ -6,6 +7,7 @@ using UnityStandardAssets._2D;
 
 namespace Metro.CharacterController
 {
+    [RequireComponent(typeof(Drone))]
     [RequireComponent(typeof(CharacterLocomotion))]
     public class CharacterControllInput : MonoBehaviour
     {
@@ -18,15 +20,17 @@ namespace Metro.CharacterController
         [SerializeField]
         private string submitName = "Submit";
 
-        [SerializeField]
-        private List<Muzzle> muzzles;
-        
         private CharacterLocomotion locomotion;
+
+        private Drone drone;
 
         void Awake()
         {
-            this.locomotion = GetComponent<CharacterLocomotion>();
+            this.locomotion = this.GetComponent<CharacterLocomotion>();
             Assert.IsNotNull(this.locomotion);
+
+            this.drone = this.GetComponent<Drone>();
+            Assert.IsNotNull(this.drone);
         }
     
         void Update()
@@ -37,10 +41,7 @@ namespace Metro.CharacterController
 
             if (CrossPlatformInputManager.GetButtonDown(this.submitName))
             {
-                for (int i = 0; i < this.muzzles.Count; i++)
-                {
-                    this.muzzles[i].Fire();
-                }
+                this.drone.Provider.Publish(StartFire.Get());
             }
         }
     }
