@@ -6,7 +6,7 @@ using UnityStandardAssets._2D;
 
 namespace Metro.CharacterController
 {
-    [RequireComponent(typeof(PlatformerCharacter2D))]
+    [RequireComponent(typeof(CharacterLocomotion))]
     public class CharacterControllInput : MonoBehaviour
     {
         [SerializeField]
@@ -21,18 +21,18 @@ namespace Metro.CharacterController
         [SerializeField]
         private List<Muzzle> muzzles;
         
-        private PlatformerCharacter2D character;
+        private CharacterLocomotion locomotion;
 
         void Awake()
         {
-            this.character = GetComponent<PlatformerCharacter2D>();
-            Assert.IsNotNull(this.character);
+            this.locomotion = GetComponent<CharacterLocomotion>();
+            Assert.IsNotNull(this.locomotion);
         }
     
         void Update()
         {
             var horizontal = CrossPlatformInputManager.GetAxis(this.horizontalName);
-            this.character.Move(horizontal, false, false);
+            this.locomotion.Move(Vector3.right * horizontal);
 
             if (CrossPlatformInputManager.GetButtonDown(this.submitName))
             {
