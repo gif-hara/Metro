@@ -358,7 +358,6 @@ MonoBehaviour:
   model: {fileID: 1470847185774734, guid: 4093fcd16f1f440758abf52ab9a58c84, type: 2}
   options:
   - {fileID: 114695612351259502, guid: 6ce14e57c47d14a1cbf152d508f12985, type: 2}
-  - {fileID: 114695612351259502, guid: a36bf727b133b44c09b7a606d9914d4f, type: 2}
 --- !u!114 &1375718181
 MonoBehaviour:
   m_ObjectHideFlags: 0
