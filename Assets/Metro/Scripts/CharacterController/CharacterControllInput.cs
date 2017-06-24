@@ -32,7 +32,7 @@ namespace Metro.CharacterController
         void Update()
         {
             var horizontal = CrossPlatformInputManager.GetAxis(this.horizontalName);
-            this.locomotion.Move(Vector3.right * horizontal);
+            this.locomotion.Move(Vector2.right * horizontal);
 
             if (CrossPlatformInputManager.GetButtonDown(this.submitName))
             {

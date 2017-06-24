@@ -15,7 +15,7 @@ namespace Metro.CharacterController
 
         private Transform cachedTransform;
 
-        private Vector3 velocity;
+        private Vector2 velocity;
 
         void Awake()
         {
@@ -26,14 +26,15 @@ namespace Metro.CharacterController
 
             this.UpdateAsObservable()
                 .Where(_ => this.isActiveAndEnabled)
+                .Where(_ => this.velocity.sqrMagnitude > 0.0f)
                 .SubscribeWithState(this, (_, _this) =>
                 {
-                    this.rigidbody2D.MovePosition(this.cachedTransform.position + this.velocity * Time.deltaTime);
+                    this.rigidbody2D.position += this.velocity * Time.deltaTime;
                     this.velocity = Vector3.zero;
                 });
         }
 
-        public void Move(Vector3 direction)
+        public void Move(Vector2 direction)
         {
             this.velocity += direction * this.speed;
         }
