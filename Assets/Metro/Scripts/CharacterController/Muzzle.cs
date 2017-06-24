@@ -12,6 +12,9 @@ namespace Metro.CharacterController
 		[SerializeField]
 		private Bullet bullet;
 
+		[SerializeField]
+		private float speed;
+
 		private Transform cachedTransform;
 
 		void Awake()
@@ -21,7 +24,7 @@ namespace Metro.CharacterController
 
 		public void Fire()
 		{
-			this.bullet.Fire(this.cachedTransform.position, this.cachedTransform.right);
+			this.bullet.Fire(this.cachedTransform.position, this.cachedTransform.right * this.speed);
 		}
 	}
 }
