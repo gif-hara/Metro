@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using Metro.Events.Character;
+﻿using Metro.Events.Character;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityStandardAssets.CrossPlatformInput;
-using UnityStandardAssets._2D;
 
 namespace Metro.CharacterController
 {
     [RequireComponent(typeof(Drone))]
-    public class CharacterControllInput : MonoBehaviour
+    public class DroneInput : MonoBehaviour
     {
         [SerializeField]
         private string horizontalName = "Horizontal";
