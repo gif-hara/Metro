@@ -35,6 +35,16 @@ namespace UnityStandardAssets.CrossPlatformInput
             m_StartPos = transform.position;
         }
 
+		#if UNITY_EDITOR
+		void Update()
+		{
+			var horizontal = Input.GetKey(KeyCode.LeftArrow) ? -1.0f : Input.GetKey(KeyCode.RightArrow) ? 1.0f : 0.0f;
+			var vertical = Input.GetKey(KeyCode.DownArrow) ? -1.0f : Input.GetKey(KeyCode.UpArrow) ? 1.0f : 0.0f;
+			m_HorizontalVirtualAxis.Update(horizontal);
+			m_VerticalVirtualAxis.Update(vertical);
+		}
+		#endif
+
 		void UpdateVirtualAxes(Vector3 value)
 		{
 			var delta = m_StartPos - value;

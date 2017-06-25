@@ -13,6 +13,20 @@ namespace UnityStandardAssets.CrossPlatformInput
 
         }
 
+        #if UNITY_EDITOR
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                CrossPlatformInputManager.SetButtonDown(Name);
+            }
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                CrossPlatformInputManager.SetButtonUp(Name);
+            }
+        }
+        #endif
+
         public void SetDownState()
         {
             CrossPlatformInputManager.SetButtonDown(Name);
@@ -40,11 +54,6 @@ namespace UnityStandardAssets.CrossPlatformInput
         public void SetAxisNegativeState()
         {
             CrossPlatformInputManager.SetAxisNegative(Name);
-        }
-
-        public void Update()
-        {
-
         }
     }
 }

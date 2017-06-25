@@ -358,6 +358,8 @@ MonoBehaviour:
   model: {fileID: 1470847185774734, guid: 4093fcd16f1f440758abf52ab9a58c84, type: 2}
   options:
   - {fileID: 114695612351259502, guid: 6ce14e57c47d14a1cbf152d508f12985, type: 2}
+  - {fileID: 114695612351259502, guid: 9a11a9fd44d714597bb95884c649114f, type: 2}
+  - {fileID: 114695612351259502, guid: 7f72e3d8dabc141dba63e8791f786877, type: 2}
 --- !u!114 &1375718181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,7 +583,7 @@ MonoBehaviour:
   damping: 0
   lookAheadFactor: 6
   lookAheadReturnSpeed: 0
-  lookAheadMoveThreshold: 1
+  lookAheadMoveThreshold: 10
 --- !u!1 &1573364656
 GameObject:
   m_ObjectHideFlags: 0
