@@ -13,6 +13,7 @@ namespace Metro.InputSystems
         private float tapDistance;
 
         [SerializeField]
+        [Range(0.0f, 1.0f)]
         private float swipeDistance;
 
         /// <summary>
