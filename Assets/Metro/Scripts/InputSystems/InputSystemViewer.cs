@@ -106,6 +106,7 @@ namespace Metro.InputSystems
         public bool CanPublishSwipe(Vector2 screenPosition)
         {
             var distance = (screenPosition - this.beginPosition).magnitude;
+            distance = distance / this.region.rect.size.magnitude;
             return distance > this.settings.SwipeDistance;
         }
     }
