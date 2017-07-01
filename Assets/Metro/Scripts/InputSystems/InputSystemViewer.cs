@@ -17,11 +17,16 @@ namespace Metro.InputSystems
         private RectTransform region;
         
         [SerializeField]
-        private CanvasGroup pointerCanvasGroup;
+        private CanvasGroup currentPointer;
+
+        [SerializeField]
+        private CanvasGroup tapPointer;
 
         private Vector2 cachedRegionSize;
 
-        private RectTransform cachedPointerTransform;
+        private RectTransform cachedCurrentPointerTransform;
+
+        private RectTransform cachedTapPointerTransform;
 
         private Vector2 beginPosition;
 
@@ -34,24 +39,32 @@ namespace Metro.InputSystems
         void Awake()
         {
             Assert.IsNotNull(this.region);
-            Assert.IsNotNull(this.pointerCanvasGroup);
+            Assert.IsNotNull(this.currentPointer);
             {
                 var anchorSize = this.region.anchorMax - this.region.anchorMin;
                 this.cachedRegionSize.Set(anchorSize.x * Screen.width, anchorSize.y * Screen.height);
             }
             {
-                this.cachedPointerTransform = this.pointerCanvasGroup.transform as RectTransform;
-                Assert.IsNotNull(this.cachedPointerTransform);
+                this.cachedCurrentPointerTransform = this.currentPointer.transform as RectTransform;
+                Assert.IsNotNull(this.cachedCurrentPointerTransform);
             }
             {
-                this.pointerCanvasGroup.alpha = 0.0f;
+                this.cachedTapPointerTransform = this.tapPointer.transform as RectTransform;
+                Assert.IsNotNull(this.cachedTapPointerTransform);
+            }
+            {
+                this.currentPointer.alpha = 0.0f;
+                this.tapPointer.alpha = 0.0f;
             }
         }
 
         public void PointerDown(Vector2 screenPosition)
         {
-            this.pointerCanvasGroup.alpha = 1.0f;
-            this.cachedPointerTransform.anchoredPosition = screenPosition;
+            this.currentPointer.alpha = 1.0f;
+            this.tapPointer.alpha = 1.0f;
+            
+            this.cachedCurrentPointerTransform.anchoredPosition = screenPosition;
+            this.cachedTapPointerTransform.anchoredPosition = screenPosition;
             this.beginPosition = screenPosition;
             this.currentPosition = screenPosition;
             this.tapDuration = 0.0f;
@@ -86,13 +99,14 @@ namespace Metro.InputSystems
             {
                 UniRxEvent.GlobalBroker.Publish(Tap.Get(screenPosition));
             }
-            this.pointerCanvasGroup.alpha = 0.0f;
+            this.currentPointer.alpha = 0.0f;
+            this.tapPointer.alpha = 0.0f;
             this.pointerEvents.Clear();
         }
 
         public void Drag(Vector2 screenPosition)
         {
-            this.cachedPointerTransform.anchoredPosition = screenPosition;
+            this.cachedCurrentPointerTransform.anchoredPosition = screenPosition;
             this.currentPosition = screenPosition;
         }
 
