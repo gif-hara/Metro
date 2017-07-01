@@ -41,7 +41,7 @@ namespace Metro.UI
                     .SubscribeWithState(this, (t, _this) => _this.AddText(_this.CreateTapMessage(t.ScreenPosition)))
                     .AddTo(this);
                 UniRxEvent.GlobalBroker.Receive<Swipe>()
-                    .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateSwipeMessage(s.Direction)))
+                    .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateSwipeMessage(s.Angle)))
                     .AddTo(this);
             }
             {
@@ -74,9 +74,9 @@ namespace Metro.UI
             return this.tapMessage.Format(screenPosition);
         }
         
-        private string CreateSwipeMessage(Vector2 screenPosition)
+        private string CreateSwipeMessage(float angle)
         {
-            return this.swipeMessage.Format(screenPosition);
+            return this.swipeMessage.Format(angle);
         }
     }
 }

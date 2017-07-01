@@ -16,7 +16,12 @@ namespace Metro.Events.InputSystems
     /// </summary>
     public sealed class Swipe : UniRxEvent<Swipe, Vector2>
     {
-        public Vector2 Direction { get { return this.param1; } }
+        public Vector2 Normalize { get { return this.param1; } }
+        
+        /// <summary>
+        /// 入力方向の角度を返す
+        /// </summary>
+        public float Angle { get { return Mathf.Atan2(this.Normalize.y, this.Normalize.x) * Mathf.Rad2Deg; } }
     }
 
     /// <summary>

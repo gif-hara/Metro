@@ -1,4 +1,5 @@
-﻿using HK.Framework.EventSystems;
+﻿using System;
+using HK.Framework.EventSystems;
 using Metro.Events.InputSystems;
 using UniRx;
 using UniRx.Triggers;
@@ -54,10 +55,12 @@ namespace Metro.InputSystems
             this.beginPosition = screenPosition;
             this.currentPosition = screenPosition;
             this.tapDuration = 0.0f;
+
+            var updateStream = this.UpdateAsObservable();
             
             // タップ秒数を更新する
             this.pointerEvents.Add(
-                this.UpdateAsObservable()
+                updateStream
                 .SubscribeWithState(this, (_, _this) =>
                 {
                     _this.tapDuration += Time.deltaTime;
@@ -67,12 +70,12 @@ namespace Metro.InputSystems
             
             // スワイプイベントを発行する
             this.pointerEvents.Add(
-                this.UpdateAsObservable()
-                .Where(_ => this.CanPublishSwipe(this.currentPosition))
+                updateStream
+                .First(_ => this.CanPublishSwipe(this.currentPosition))
                 .SubscribeWithState(this, (_, _this) =>
-                {
-                    UniRxEvent.GlobalBroker.Publish(Swipe.Get((this.beginPosition - this.currentPosition).normalized));
-                })
+                    {
+                        _this.pointerEvents.Add(_this.PublishSwipe(updateStream));
+                    })
                 .AddTo(this)
             );
         }
@@ -106,6 +109,16 @@ namespace Metro.InputSystems
             var distance = (screenPosition - this.beginPosition).magnitude;
             distance = distance / this.region.rect.size.magnitude;
             return distance > this.settings.SwipeDistance;
+        }
+
+        private IDisposable PublishSwipe(UniRx.IObservable<Unit> updateStream)
+        {
+            return updateStream
+                .SubscribeWithState(this, (_, _this) =>
+                {
+                    UniRxEvent.GlobalBroker.Publish(Swipe.Get((_this.beginPosition - _this.currentPosition).normalized));
+                })
+                .AddTo(this);
         }
     }
 }
