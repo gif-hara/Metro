@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Name: InputSettings
   m_EditorClassIdentifier: 
   tapDuration: 1
-  tapDistance: 0.1
+  tapDistance: 0.05
+  swipeDistance: 0.1
