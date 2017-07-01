@@ -56,6 +56,8 @@ namespace Metro.InputSystems
             this.beginPosition = screenPosition;
             this.currentPosition = screenPosition;
             this.tapDuration = 0.0f;
+            
+            // タップ秒数を更新する
             this.pointerEvents.Add(
                 this.UpdateAsObservable()
                 .SubscribeWithState(this, (_, _this) =>
@@ -64,6 +66,8 @@ namespace Metro.InputSystems
                 })
                 .AddTo(this)
             );
+            
+            // スワイプイベントを発行する
             this.pointerEvents.Add(
                 this.UpdateAsObservable()
                 .Where(_ => this.CanPublishSwipe(this.currentPosition))
