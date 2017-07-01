@@ -12,40 +12,46 @@ namespace Metro.InputSystems
         private RectTransform region;
         
         [SerializeField]
-        private CanvasGroup pointer;
+        private CanvasGroup pointerCanvasGroup;
 
         private Vector2 cachedRegionSize;
 
         private RectTransform cachedPointerTransform;
 
+        private Vector2 beginPosition;
+
         void Awake()
         {
             Assert.IsNotNull(this.region);
-            Assert.IsNotNull(this.pointer);
+            Assert.IsNotNull(this.pointerCanvasGroup);
             {
                 var anchorSize = this.region.anchorMax - this.region.anchorMin;
                 this.cachedRegionSize.Set(anchorSize.x * Screen.width, anchorSize.y * Screen.height);
             }
             {
-                this.cachedPointerTransform = this.pointer.transform as RectTransform;
+                this.cachedPointerTransform = this.pointerCanvasGroup.transform as RectTransform;
                 Assert.IsNotNull(this.cachedPointerTransform);
             }
-        }
-
-        void Start()
-        {
+            {
+                this.pointerCanvasGroup.alpha = 0.0f;
+            }
         }
 
         public void PointerDown(Vector2 screenPosition)
         {
-            this.pointer.alpha = 1.0f;
+            this.pointerCanvasGroup.alpha = 1.0f;
             this.cachedPointerTransform.anchoredPosition = screenPosition;
+            this.beginPosition = screenPosition;
         }
 
         public void PointerUp()
         {
-            this.pointer.alpha = 0.0f;
+            this.pointerCanvasGroup.alpha = 0.0f;
         }
-        
+
+        public void Drag(Vector2 screenPosition)
+        {
+            this.cachedPointerTransform.anchoredPosition = screenPosition;
+        }
     }
 }
