@@ -38,7 +38,7 @@ namespace Metro.UI
             }
             {
                 UniRxEvent.GlobalBroker.Receive<Tap>()
-                    .Subscribe(t => this.AddText(this.CreateTapMessage(t.ScreenPosition)))
+                    .SubscribeWithState(this, (t, _this) => _this.AddText(_this.CreateTapMessage(t.ScreenPosition)))
                     .AddTo(this);
                 UniRxEvent.GlobalBroker.Receive<Swipe>()
                     .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateSwipeMessage(s.Direction)))
