@@ -19,6 +19,10 @@ namespace Metro.InputSystems
         [SerializeField]
         private int flickBuffer;
 
+        [SerializeField]
+        [Range(0.0f, 1.0f)]
+        private float flickDistance;
+
         /// <summary>
         /// タップを許容する入力時間
         /// </summary>
@@ -61,12 +65,22 @@ namespace Metro.InputSystems
             private set { this.flickBuffer = Mathf.Max(0, value); }
         }
 
+        /// <summary>
+        /// フリックだと判断するタッチ移動距離
+        /// </summary>
+        public float FlickDistance
+        {
+            get { return this.flickDistance; } 
+            private set { this.flickDistance = Mathf.Clamp01(value); }
+        }
+
         void OnValidate()
         {
             this.TapDuration = this.tapDuration;
             this.TapDistance = this.tapDistance;
             this.SwipeDistance = this.swipeDistance;
             this.FlickBuffer = this.flickBuffer;
+            this.FlickDistance = this.flickDistance;
         }
     }
 }

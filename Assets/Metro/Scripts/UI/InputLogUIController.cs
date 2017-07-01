@@ -20,6 +20,9 @@ namespace Metro.UI
         private StringAsset.Finder swipeMessage;
 
         [SerializeField]
+        private StringAsset.Finder flickMessage;
+
+        [SerializeField]
         private float fontSize;
         
         private Text cachedText;
@@ -42,6 +45,9 @@ namespace Metro.UI
                     .AddTo(this);
                 UniRxEvent.GlobalBroker.Receive<Swipe>()
                     .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateSwipeMessage(s.Angle)))
+                    .AddTo(this);
+                UniRxEvent.GlobalBroker.Receive<Flick>()
+                    .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateFlickMessage(s.Angle)))
                     .AddTo(this);
             }
             {
@@ -77,6 +83,11 @@ namespace Metro.UI
         private string CreateSwipeMessage(float angle)
         {
             return this.swipeMessage.Format(angle);
+        }
+
+        private string CreateFlickMessage(float angle)
+        {
+            return this.flickMessage.Format(angle);
         }
     }
 }

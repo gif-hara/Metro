@@ -27,11 +27,11 @@ namespace Metro.InputSystems
         [SerializeField]
         private CanvasGroupData delayPointer;
 
-        private Vector2 cachedRegionSize;
-
         private Vector2 beginPosition;
 
         private Vector2 currentPosition;
+
+        private Vector2 flickFromPosition;
 
         private float tapDuration;
 
@@ -41,13 +41,7 @@ namespace Metro.InputSystems
         {
             Assert.IsNotNull(this.region);
             Assert.IsNotNull(this.currentPointer);
-            {
-                var anchorSize = this.region.anchorMax - this.region.anchorMin;
-                this.cachedRegionSize.Set(anchorSize.x * Screen.width, anchorSize.y * Screen.height);
-            }
-            {
-                this.SetAlpha(0.0f);
-            }
+            this.SetAlpha(0.0f);
         }
 
         public void PointerDown(Vector2 screenPosition)
@@ -84,16 +78,18 @@ namespace Metro.InputSystems
                 .AddTo(this)
             );
             
+            // フリックの開始地点を登録する
             this.pointerEvents.Add(
                 updateStream
                 .Select(_ => this.currentPosition)
                 .Buffer(this.settings.FlickBuffer, 1)
-                .Subscribe(p =>
+                .SubscribeWithState(this, (p, _this) =>
                     {
-                        this.delayPointer.CachedTransform.anchoredPosition = p[0];
+                        this.flickFromPosition = p[0];
+                        this.delayPointer.CachedTransform.anchoredPosition = _this.flickFromPosition;
                     })
                 );
-            
+                        
             UniRxEvent.GlobalBroker.Publish(Events.InputSystems.PointerDown.Get(screenPosition));
         }
 
@@ -102,6 +98,11 @@ namespace Metro.InputSystems
             if (this.CanPublishTap(screenPosition))
             {
                 UniRxEvent.GlobalBroker.Publish(Tap.Get(screenPosition));
+            }
+            if (this.CanPublishFlick(screenPosition))
+            {
+                var normalize = (screenPosition - this.flickFromPosition).normalized;
+                UniRxEvent.GlobalBroker.Publish(Flick.Get(normalize));
             }
             this.SetAlpha(0.0f);
             UniRxEvent.GlobalBroker.Publish(Events.InputSystems.PointerUp.Get(screenPosition));
@@ -130,6 +131,13 @@ namespace Metro.InputSystems
             return distance > this.settings.SwipeDistance;
         }
 
+        private bool CanPublishFlick(Vector2 lastPosition)
+        {
+            var distance = (lastPosition - this.flickFromPosition).magnitude;
+            distance = distance / this.region.rect.size.magnitude;
+            return distance > this.settings.FlickDistance;
+        }
+
         private void SetAlpha(float value)
         {
             this.currentPointer.CanvasGroup.alpha = value;
@@ -142,7 +150,7 @@ namespace Metro.InputSystems
             return updateStream
                 .SubscribeWithState(this, (_, _this) =>
                 {
-                    UniRxEvent.GlobalBroker.Publish(Swipe.Get((_this.beginPosition - _this.currentPosition).normalized));
+                    UniRxEvent.GlobalBroker.Publish(Swipe.Get((_this.currentPosition - _this.beginPosition).normalized));
                 })
                 .AddTo(this);
         }

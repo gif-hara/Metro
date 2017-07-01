@@ -14,3 +14,5 @@ MonoBehaviour:
   tapDuration: 1
   tapDistance: 0.05
   swipeDistance: 0.1
+  flickBuffer: 3
+  flickDistance: 0.1

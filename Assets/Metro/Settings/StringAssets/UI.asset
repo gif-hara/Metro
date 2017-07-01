@@ -20,3 +20,7 @@ MonoBehaviour:
       ja: <color=#26ff00>[Swipe]</color>{0}
       en: 
     guid: cda39568-bb21-43e4-abfc-53553e52ca7c
+  - value:
+      ja: <color=#26ff00>[Flick]</color>{0}
+      en: 
+    guid: 1e0758f1-ffb4-430c-ae8b-1e37324f9b86
