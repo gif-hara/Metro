@@ -23,5 +23,11 @@ namespace Metro.InputSystems
         {
             this.viewer.Drag(eventData.position);
         }
+
+        private bool IsFirstPointer(PointerEventData eventData)
+        {
+            //TODO;
+            return eventData.pointerId == 0;
+        }
     }
 }
