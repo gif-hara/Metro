@@ -9,6 +9,7 @@ namespace Metro.InputSystems
         private float tapDuration;
 
         [SerializeField]
+        [Range(0.0f, 1.0f)]
         private float tapDistance;
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace Metro.InputSystems
         public float TapDistance
         {
             get { return this.tapDistance; } 
-            private set { this.tapDistance = Mathf.Max(0.0f, value); }
+            private set { this.tapDistance = Mathf.Clamp01(value); }
         }
 
         void OnValidate()
