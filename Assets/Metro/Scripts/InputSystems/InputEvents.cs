@@ -10,4 +10,20 @@ namespace Metro.Events.InputSystems
     {
         public Vector2 ScreenPosition { get { return this.param1; } }
     }
+
+    /// <summary>
+    /// スワイプ時のイベント
+    /// </summary>
+    public sealed class Swipe : UniRxEvent<Swipe, Vector2>
+    {
+        public Vector2 Direction { get { return this.param1; } }
+    }
+
+    /// <summary>
+    /// フリック時のイベント
+    /// </summary>
+    public sealed class Flick : UniRxEvent<Flick, Vector2>
+    {
+        public Vector2 Direction { get { return this.param1; } }
+    }
 }
