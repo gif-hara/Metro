@@ -145,7 +145,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 5000, y: 3}
+  m_SizeDelta: {x: 5000, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &274058325
 MonoBehaviour:
@@ -336,6 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fdd4d803e4764d888b31ac99abc47d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings: {fileID: 11400000, guid: 56ae0d47f653d4685a4e4a4f28f08921, type: 2}
   region: {fileID: 1138721341}
   pointerCanvasGroup: {fileID: 1142261072}
 --- !u!114 &924635694
@@ -464,7 +465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.497}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -974,7 +975,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 3, y: 5000}
+  m_SizeDelta: {x: 1, y: 5000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1733666475
 MonoBehaviour:

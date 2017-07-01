@@ -16,7 +16,7 @@ namespace Metro.InputSystems
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            this.viewer.PointerUp();
+            this.viewer.PointerUp(eventData.position);
         }
 
         public void OnDrag(PointerEventData eventData)

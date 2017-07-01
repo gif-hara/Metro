@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 313dcf7576c774cfb83c252cfd580add, type: 3}
   m_Name: InputSettings
   m_EditorClassIdentifier: 
-  tapDuration: 0.1
+  tapDuration: 1
   tapDistance: 0.13
