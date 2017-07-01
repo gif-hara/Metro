@@ -26,9 +26,13 @@ namespace Metro.InputSystems
 
         private Vector2 beginPosition;
 
+        private Vector2 currentPosition;
+
         private float tapDuration;
 
         private IDisposable tapDurationTimer;
+
+        private IDisposable swipeStream;
 
         void Awake()
         {
@@ -52,11 +56,19 @@ namespace Metro.InputSystems
             this.pointerCanvasGroup.alpha = 1.0f;
             this.cachedPointerTransform.anchoredPosition = screenPosition;
             this.beginPosition = screenPosition;
+            this.currentPosition = screenPosition;
             this.tapDuration = 0.0f;
             this.tapDurationTimer = this.UpdateAsObservable()
                 .SubscribeWithState(this, (_, _this) =>
                 {
                     _this.tapDuration += Time.deltaTime;
+                })
+                .AddTo(this);
+            this.swipeStream = this.UpdateAsObservable()
+                .Where(_ => this.CanPublishSwipe(this.currentPosition))
+                .SubscribeWithState(this, (_, _this) =>
+                {
+                    UniRxEvent.GlobalBroker.Publish(Swipe.Get((this.beginPosition - this.currentPosition).normalized));
                 })
                 .AddTo(this);
         }
@@ -69,11 +81,13 @@ namespace Metro.InputSystems
             }
             this.pointerCanvasGroup.alpha = 0.0f;
             this.tapDurationTimer.Dispose();
+            this.swipeStream.Dispose();
         }
 
         public void Drag(Vector2 screenPosition)
         {
             this.cachedPointerTransform.anchoredPosition = screenPosition;
+            this.currentPosition = screenPosition;
         }
 
         private bool CanPublishTap(Vector2 lastPosition)
@@ -82,6 +96,12 @@ namespace Metro.InputSystems
             tapDistance = tapDistance / this.region.rect.size.magnitude;
             return this.tapDuration < this.settings.TapDuration
                 && tapDistance < this.settings.TapDistance;
+        }
+
+        public bool CanPublishSwipe(Vector2 screenPosition)
+        {
+            var distance = (screenPosition - this.beginPosition).magnitude;
+            return distance > this.settings.SwipeDistance;
         }
     }
 }

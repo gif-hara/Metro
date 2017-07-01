@@ -12,6 +12,9 @@ namespace Metro.InputSystems
         [Range(0.0f, 1.0f)]
         private float tapDistance;
 
+        [SerializeField]
+        private float swipeDistance;
+
         /// <summary>
         /// タップを許容する入力時間
         /// </summary>
@@ -36,10 +39,20 @@ namespace Metro.InputSystems
             private set { this.tapDistance = Mathf.Clamp01(value); }
         }
 
+        /// <summary>
+        /// スワイプだと判断するタッチ移動距離
+        /// </summary>
+        public float SwipeDistance
+        {
+            get { return this.swipeDistance; } 
+            private set { this.swipeDistance = Mathf.Clamp01(value); }
+        }
+
         void OnValidate()
         {
             this.TapDuration = this.tapDuration;
             this.TapDistance = this.tapDistance;
+            this.SwipeDistance = this.swipeDistance;
         }
     }
 }
