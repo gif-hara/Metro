@@ -1,4 +1,7 @@
-﻿using Metro.Events.Character;
+﻿using HK.Framework.EventSystems;
+using Metro.Events.Character;
+using Metro.Events.InputSystems;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityStandardAssets.CrossPlatformInput;
@@ -29,6 +32,19 @@ namespace Metro.CharacterController
         {
             this.drone = this.GetComponent<Drone>();
             Assert.IsNotNull(this.drone);
+
+            UniRxEvent.GlobalBroker.Receive<Swipe>()
+                .SubscribeWithState(this, (s, _this) =>
+                {
+                    _this.drone.Provider.Publish(Move.Get(s.Normalize, _this.speed));
+                })
+                .AddTo(this);
+            UniRxEvent.GlobalBroker.Receive<Tap>()
+                .SubscribeWithState(this, (t, _this) =>
+                {
+                    _this.drone.Provider.Publish(StartFire.Get());
+                })
+                .AddTo(this);
         }
     
         void Update()
