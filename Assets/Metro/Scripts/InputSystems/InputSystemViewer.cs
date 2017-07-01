@@ -80,7 +80,6 @@ namespace Metro.InputSystems
         {
             var tapDistance = (lastPosition - this.beginPosition).magnitude;
             tapDistance = tapDistance / this.region.rect.size.magnitude;
-            Debug.Log(tapDistance);
             return this.tapDuration < this.settings.TapDuration
                 && tapDistance < this.settings.TapDistance;
         }
