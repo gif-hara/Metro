@@ -63,7 +63,7 @@ namespace Metro.InputSystems
 
         public void PointerUp(Vector2 screenPosition)
         {
-            if (this.tapDuration < this.settings.TapDuration)
+            if (this.CanPublishTap(screenPosition))
             {
                 UniRxEvent.GlobalBroker.Publish(Tap.Get(screenPosition));
             }
@@ -74,6 +74,15 @@ namespace Metro.InputSystems
         public void Drag(Vector2 screenPosition)
         {
             this.cachedPointerTransform.anchoredPosition = screenPosition;
+        }
+
+        private bool CanPublishTap(Vector2 lastPosition)
+        {
+            var tapDistance = (lastPosition - this.beginPosition).magnitude;
+            tapDistance = tapDistance / this.region.rect.size.magnitude;
+            Debug.Log(tapDistance);
+            return this.tapDuration < this.settings.TapDuration
+                && tapDistance < this.settings.TapDistance;
         }
     }
 }
