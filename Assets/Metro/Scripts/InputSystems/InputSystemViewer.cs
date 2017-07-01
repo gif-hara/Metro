@@ -1,11 +1,9 @@
-﻿using System;
-using HK.Framework.EventSystems;
+﻿using HK.Framework.EventSystems;
 using Metro.Events.InputSystems;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.UI;
 
 namespace Metro.InputSystems
 {
