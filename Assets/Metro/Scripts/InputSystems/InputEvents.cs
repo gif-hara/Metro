@@ -31,4 +31,20 @@ namespace Metro.Events.InputSystems
     {
         public Vector2 Direction { get { return this.param1; } }
     }
+
+    /// <summary>
+    /// タッチされた際のイベント
+    /// </summary>
+    public sealed class PointerDown : UniRxEvent<PointerDown, Vector2>
+    {
+        public Vector2 ScreenPosition { get { return this.param1; } }
+    }
+    
+    /// <summary>
+    /// 指が離れた際のイベント
+    /// </summary>
+    public sealed class PointerUp : UniRxEvent<PointerUp, Vector2>
+    {
+        public Vector2 ScreenPosition { get { return this.param1; } }
+    }
 }
