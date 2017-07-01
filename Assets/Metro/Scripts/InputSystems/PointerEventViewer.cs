@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace Metro.InputSystems
 {
-    public sealed class TapViewer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+    public sealed class PointerEventViewer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
     {
         [SerializeField]
         private InputSystemViewer viewer;

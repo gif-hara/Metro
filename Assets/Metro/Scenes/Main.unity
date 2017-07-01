@@ -348,7 +348,7 @@ MonoBehaviour:
     target: {fileID: 11400000, guid: 6e3763fc7c4ea411a9992e8babe5681a, type: 2}
     value: <color=#26ff00>[Tap]</color>{0}
     guid: e1cbc90e-7994-4cbc-92de-27812d3ccab7
-  fontSize: 19.5
+  fontSize: 19.07
 --- !u!1001 &899538184
 Prefab:
   m_ObjectHideFlags: 0
