@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography;
+using System.Text;
 using HK.Framework.EventSystems;
 using Metro.Events.InputSystems;
 using UniRx;
@@ -17,16 +19,15 @@ namespace Metro.InputSystems
         private RectTransform region;
         
         [SerializeField]
-        private CanvasGroup currentPointer;
+        private CanvasGroupData currentPointer;
 
         [SerializeField]
-        private CanvasGroup tapPointer;
+        private CanvasGroupData tapPointer;
+
+        [SerializeField]
+        private CanvasGroupData delayPointer;
 
         private Vector2 cachedRegionSize;
-
-        private RectTransform cachedCurrentPointerTransform;
-
-        private RectTransform cachedTapPointerTransform;
 
         private Vector2 beginPosition;
 
@@ -45,14 +46,6 @@ namespace Metro.InputSystems
                 this.cachedRegionSize.Set(anchorSize.x * Screen.width, anchorSize.y * Screen.height);
             }
             {
-                this.cachedCurrentPointerTransform = this.currentPointer.transform as RectTransform;
-                Assert.IsNotNull(this.cachedCurrentPointerTransform);
-            }
-            {
-                this.cachedTapPointerTransform = this.tapPointer.transform as RectTransform;
-                Assert.IsNotNull(this.cachedTapPointerTransform);
-            }
-            {
                 this.SetAlpha(0.0f);
             }
         }
@@ -61,8 +54,9 @@ namespace Metro.InputSystems
         {
             this.SetAlpha(1.0f);
             
-            this.cachedCurrentPointerTransform.anchoredPosition = screenPosition;
-            this.cachedTapPointerTransform.anchoredPosition = screenPosition;
+            this.currentPointer.CachedTransform.anchoredPosition = screenPosition;
+            this.tapPointer.CachedTransform.anchoredPosition = screenPosition;
+            this.delayPointer.CachedTransform.anchoredPosition = screenPosition;
             this.beginPosition = screenPosition;
             this.currentPosition = screenPosition;
             this.tapDuration = 0.0f;
@@ -89,6 +83,18 @@ namespace Metro.InputSystems
                     })
                 .AddTo(this)
             );
+            
+            this.pointerEvents.Add(
+                updateStream
+                .Select(_ => this.currentPosition)
+                .Buffer(this.settings.FlickBuffer, 1)
+                .Subscribe(p =>
+                    {
+                        this.delayPointer.CachedTransform.anchoredPosition = p[0];
+                    })
+                );
+            
+            UniRxEvent.GlobalBroker.Publish(Events.InputSystems.PointerDown.Get(screenPosition));
         }
 
         public void PointerUp(Vector2 screenPosition)
@@ -98,12 +104,14 @@ namespace Metro.InputSystems
                 UniRxEvent.GlobalBroker.Publish(Tap.Get(screenPosition));
             }
             this.SetAlpha(0.0f);
+            UniRxEvent.GlobalBroker.Publish(Events.InputSystems.PointerUp.Get(screenPosition));
+
             this.pointerEvents.Clear();
         }
 
         public void Drag(Vector2 screenPosition)
         {
-            this.cachedCurrentPointerTransform.anchoredPosition = screenPosition;
+            this.currentPointer.CachedTransform.anchoredPosition = screenPosition;
             this.currentPosition = screenPosition;
         }
 
@@ -124,8 +132,9 @@ namespace Metro.InputSystems
 
         private void SetAlpha(float value)
         {
-            this.currentPointer.alpha = value;
-            this.tapPointer.alpha = value;
+            this.currentPointer.CanvasGroup.alpha = value;
+            this.tapPointer.CanvasGroup.alpha = value;
+            this.delayPointer.CanvasGroup.alpha = value;
         }
 
         private IDisposable PublishSwipe(UniRx.IObservable<Unit> updateStream)
@@ -136,6 +145,33 @@ namespace Metro.InputSystems
                     UniRxEvent.GlobalBroker.Publish(Swipe.Get((_this.beginPosition - _this.currentPosition).normalized));
                 })
                 .AddTo(this);
+        }
+
+        [Serializable]
+        private class CanvasGroupData
+        {
+            [SerializeField]
+            private CanvasGroup canvasGroup;
+
+            private RectTransform cachedTransform;
+
+            public CanvasGroup CanvasGroup
+            {
+                get { return this.canvasGroup; }
+            }
+
+            public RectTransform CachedTransform
+            {
+                get
+                {
+                    if (this.cachedTransform == null)
+                    {
+                        this.cachedTransform = this.canvasGroup.transform as RectTransform;
+                        Assert.IsNotNull(this.cachedTransform);
+                    }
+                    return cachedTransform;
+                }
+            }
         }
     }
 }
