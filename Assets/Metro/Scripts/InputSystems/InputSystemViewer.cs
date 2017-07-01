@@ -30,9 +30,7 @@ namespace Metro.InputSystems
 
         private float tapDuration;
 
-        private IDisposable tapDurationTimer;
-
-        private IDisposable swipeStream;
+        private CompositeDisposable pointerEvents = new CompositeDisposable();
 
         void Awake()
         {
@@ -58,19 +56,23 @@ namespace Metro.InputSystems
             this.beginPosition = screenPosition;
             this.currentPosition = screenPosition;
             this.tapDuration = 0.0f;
-            this.tapDurationTimer = this.UpdateAsObservable()
+            this.pointerEvents.Add(
+                this.UpdateAsObservable()
                 .SubscribeWithState(this, (_, _this) =>
                 {
                     _this.tapDuration += Time.deltaTime;
                 })
-                .AddTo(this);
-            this.swipeStream = this.UpdateAsObservable()
+                .AddTo(this)
+            );
+            this.pointerEvents.Add(
+                this.UpdateAsObservable()
                 .Where(_ => this.CanPublishSwipe(this.currentPosition))
                 .SubscribeWithState(this, (_, _this) =>
                 {
                     UniRxEvent.GlobalBroker.Publish(Swipe.Get((this.beginPosition - this.currentPosition).normalized));
                 })
-                .AddTo(this);
+                .AddTo(this)
+            );
         }
 
         public void PointerUp(Vector2 screenPosition)
@@ -80,8 +82,7 @@ namespace Metro.InputSystems
                 UniRxEvent.GlobalBroker.Publish(Tap.Get(screenPosition));
             }
             this.pointerCanvasGroup.alpha = 0.0f;
-            this.tapDurationTimer.Dispose();
-            this.swipeStream.Dispose();
+            this.pointerEvents.Clear();
         }
 
         public void Drag(Vector2 screenPosition)
