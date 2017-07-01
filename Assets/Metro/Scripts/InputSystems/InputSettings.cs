@@ -11,16 +11,28 @@ namespace Metro.InputSystems
         [SerializeField]
         private float tapDistance;
 
+        /// <summary>
+        /// タップを許容する入力時間
+        /// </summary>
+        /// <remarks>
+        /// タッチを開始した時間と終了した時間がこの値より小さい場合はタップしたとみなします
+        /// </remarks>
         public float TapDuration
         {
             get { return tapDuration; }
             private set { this.tapDuration = Mathf.Max(0.1f, value); }
         }
 
+        /// <summary>
+        /// タップを許容する距離
+        /// </summary>
+        /// <remarks>
+        /// 最初にタッチした座標と最後の座標との距離を領域のサイズで正規化した値がこの値より小さい場合はタップとみなします
+        /// </remarks>
         public float TapDistance
         {
             get { return this.tapDistance; } 
-            private set { this.tapDistance = Mathf.Max(0.1f, value); }
+            private set { this.tapDistance = Mathf.Max(0.0f, value); }
         }
 
         void OnValidate()
