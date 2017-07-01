@@ -16,3 +16,7 @@ MonoBehaviour:
       ja: <color=#26ff00>[Tap]</color>{0}
       en: 
     guid: e1cbc90e-7994-4cbc-92de-27812d3ccab7
+  - value:
+      ja: <color=#26ff00>[Swipe]</color>{0}
+      en: 
+    guid: cda39568-bb21-43e4-abfc-53553e52ca7c

@@ -17,6 +17,9 @@ namespace Metro.UI
         private StringAsset.Finder tapMessage;
 
         [SerializeField]
+        private StringAsset.Finder swipeMessage;
+
+        [SerializeField]
         private float fontSize;
         
         private Text cachedText;
@@ -36,6 +39,9 @@ namespace Metro.UI
             {
                 UniRxEvent.GlobalBroker.Receive<Tap>()
                     .Subscribe(t => this.AddText(this.CreateTapMessage(t.ScreenPosition)))
+                    .AddTo(this);
+                UniRxEvent.GlobalBroker.Receive<Swipe>()
+                    .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateSwipeMessage(s.Direction)))
                     .AddTo(this);
             }
             {
@@ -66,6 +72,11 @@ namespace Metro.UI
         private string CreateTapMessage(Vector2 screenPosition)
         {
             return this.tapMessage.Format(screenPosition);
+        }
+        
+        private string CreateSwipeMessage(Vector2 screenPosition)
+        {
+            return this.swipeMessage.Format(screenPosition);
         }
     }
 }
