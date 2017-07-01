@@ -348,6 +348,10 @@ MonoBehaviour:
     target: {fileID: 11400000, guid: 6e3763fc7c4ea411a9992e8babe5681a, type: 2}
     value: <color=#26ff00>[Tap]</color>{0}
     guid: e1cbc90e-7994-4cbc-92de-27812d3ccab7
+  swipeMessage:
+    target: {fileID: 11400000, guid: 6e3763fc7c4ea411a9992e8babe5681a, type: 2}
+    value: <color=#26ff00>[Swipe]</color>{0}
+    guid: cda39568-bb21-43e4-abfc-53553e52ca7c
   fontSize: 19.07
 --- !u!1001 &899538184
 Prefab:
