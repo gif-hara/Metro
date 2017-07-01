@@ -1,6 +1,7 @@
 ﻿using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 namespace Metro.InputSystems
@@ -11,30 +12,39 @@ namespace Metro.InputSystems
         private RectTransform region;
         
         [SerializeField]
-        private RectTransform pointer;
+        private CanvasGroup pointer;
 
         private Vector2 cachedRegionSize;
 
+        private RectTransform cachedPointerTransform;
+
         void Awake()
         {
-            var anchorSize = this.region.anchorMax - this.region.anchorMin;
-            this.cachedRegionSize.Set(anchorSize.x * Screen.width, anchorSize.y * Screen.height);
-            Debug.Log(this.cachedRegionSize);
-            this.UpdateAsObservable()
-                .Where(_ => this.isActiveAndEnabled)
-                .SubscribeWithState(this, (_, _this) =>
-                {
-                    _this.Begin(Input.mousePosition);
-                });
+            Assert.IsNotNull(this.region);
+            Assert.IsNotNull(this.pointer);
+            {
+                var anchorSize = this.region.anchorMax - this.region.anchorMin;
+                this.cachedRegionSize.Set(anchorSize.x * Screen.width, anchorSize.y * Screen.height);
+            }
+            {
+                this.cachedPointerTransform = this.pointer.transform as RectTransform;
+                Assert.IsNotNull(this.cachedPointerTransform);
+            }
         }
 
         void Start()
         {
         }
 
-        public void Begin(Vector2 screenPosition)
+        public void PointerDown(Vector2 screenPosition)
         {
-            this.pointer.anchoredPosition = screenPosition;
+            this.pointer.alpha = 1.0f;
+            this.cachedPointerTransform.anchoredPosition = screenPosition;
+        }
+
+        public void PointerUp()
+        {
+            this.pointer.alpha = 0.0f;
         }
         
     }
