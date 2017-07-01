@@ -53,15 +53,13 @@ namespace Metro.InputSystems
                 Assert.IsNotNull(this.cachedTapPointerTransform);
             }
             {
-                this.currentPointer.alpha = 0.0f;
-                this.tapPointer.alpha = 0.0f;
+                this.SetAlpha(0.0f);
             }
         }
 
         public void PointerDown(Vector2 screenPosition)
         {
-            this.currentPointer.alpha = 1.0f;
-            this.tapPointer.alpha = 1.0f;
+            this.SetAlpha(1.0f);
             
             this.cachedCurrentPointerTransform.anchoredPosition = screenPosition;
             this.cachedTapPointerTransform.anchoredPosition = screenPosition;
@@ -99,8 +97,7 @@ namespace Metro.InputSystems
             {
                 UniRxEvent.GlobalBroker.Publish(Tap.Get(screenPosition));
             }
-            this.currentPointer.alpha = 0.0f;
-            this.tapPointer.alpha = 0.0f;
+            this.SetAlpha(0.0f);
             this.pointerEvents.Clear();
         }
 
@@ -123,6 +120,12 @@ namespace Metro.InputSystems
             var distance = (screenPosition - this.beginPosition).magnitude;
             distance = distance / this.region.rect.size.magnitude;
             return distance > this.settings.SwipeDistance;
+        }
+
+        private void SetAlpha(float value)
+        {
+            this.currentPointer.alpha = value;
+            this.tapPointer.alpha = value;
         }
 
         private IDisposable PublishSwipe(UniRx.IObservable<Unit> updateStream)
