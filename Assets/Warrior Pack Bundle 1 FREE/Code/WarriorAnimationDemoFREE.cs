@@ -1,116 +1,174 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WarriorAnimationDemoFREE : MonoBehaviour 
+public enum CharacterState
 {
-	public Animator animator;
+	Idle,
+	Box
+};
 
-	float rotationSpeed = 30;
-
+public class CrafterControllerFREE : MonoBehaviour
+{
+	private Animator animator;
+	private GameObject box;
+	float rotationSpeed = 5;
 	Vector3 inputVec;
-	Vector3 targetDirection;
-	
-	//Warrior types
-	public enum Warrior{Karate, Ninja, Brute, Sorceress, Knight, Mage, Archer, TwoHanded, Swordsman, Spearman, Hammer, Crossbow};
+	bool isMoving;
+	bool isPaused;
+	public CharacterState charState;
 
-	public Warrior warrior;
-	
+	void Awake()
+	{
+		animator = this.GetComponent<Animator>();
+		box = GameObject.Find("Carry");
+	}
+
+	void Start()
+	{
+		StartCoroutine(COShowItem("none", 0f));
+		charState = CharacterState.Idle;
+	}
+
 	void Update()
 	{
 		//Get input from controls
 		float z = Input.GetAxisRaw("Horizontal");
 		float x = -(Input.GetAxisRaw("Vertical"));
 		inputVec = new Vector3(x, 0, z);
+		animator.SetFloat("VelocityX", -x);
+		animator.SetFloat("VelocityY", z);
 
-		//Apply inputs to animator
-		animator.SetFloat("Input X", z);
-		animator.SetFloat("Input Z", -(x));
-
-		if (x != 0 || z != 0 )  //if there is some input
-		{
+		//if there is some input
+		if(x != 0 || z != 0)
+		{  
 			//set that character is moving
 			animator.SetBool("Moving", true);
-			animator.SetBool("Running", true);
+			isMoving = true;
+
+			//if we are running, set the animator
+			if(Input.GetButton("Jump"))
+			{
+				animator.SetBool("Running", true);
+			}
+			else
+			{
+				animator.SetBool("Running", false);
+			}
 		}
 		else
 		{
 			//character is not moving
 			animator.SetBool("Moving", false);
-			animator.SetBool("Running", false);
+			isMoving = false;
 		}
 
-		if (Input.GetButtonDown("Fire1"))
+		//update character position and facing
+		UpdateMovement();
+
+		if(Input.GetKey(KeyCode.R))
 		{
-			animator.SetTrigger("Attack1Trigger");
-			if (warrior == Warrior.Brute)
-				StartCoroutine (COStunPause(1.2f));
-			else if (warrior == Warrior.Sorceress)
-				StartCoroutine (COStunPause(1.2f));
-			else
-				StartCoroutine (COStunPause(.6f));
+			this.gameObject.transform.position = new Vector3(0, 0, 0);
 		}
 
-		UpdateMovement();  //update character position and facing
-	}
-
-	public IEnumerator COStunPause(float pauseTime)
-	{
-		yield return new WaitForSeconds(pauseTime);
-	}
-
-	//converts control input vectors into camera facing vectors
-	void GetCameraRelativeMovement()
-	{  
-		Transform cameraTransform = Camera.main.transform;
-
-		// Forward vector relative to the camera along the x-z plane   
-		Vector3 forward = cameraTransform.TransformDirection(Vector3.forward);
-		forward.y = 0;
-		forward = forward.normalized;
-
-		// Right vector relative to the camera
-		// Always orthogonal to the forward vector
-		Vector3 right= new Vector3(forward.z, 0, -forward.x);
-
-		//directional inputs
-		float v= Input.GetAxisRaw("Vertical");
-		float h= Input.GetAxisRaw("Horizontal");
-
-		// Target direction relative to the camera
-		targetDirection = h * right + v * forward;
+		//sent velocity to animator
+		animator.SetFloat("Velocity", UpdateMovement());  
 	}
 
 	//face character along input direction
-	void RotateTowardMovementDirection()  
+	void RotateTowardsMovementDir()
 	{
-		if (inputVec != Vector3.zero)
+		if(!isPaused)
 		{
-			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetDirection), Time.deltaTime * rotationSpeed);
+			if(inputVec != Vector3.zero)
+			{
+				transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(inputVec), Time.deltaTime * rotationSpeed);
+			}
 		}
 	}
-
-	void UpdateMovement()
+	
+	//movement of character
+	float UpdateMovement()
 	{
 		//get movement input from controls
-		Vector3 motion = inputVec;
+		Vector3 motion = inputVec;  
 
 		//reduce input for diagonal movement
-		motion *= (Mathf.Abs(inputVec.x) == 1 && Mathf.Abs(inputVec.z) == 1) ? 0.7f:1;
+		motion *= (Mathf.Abs(inputVec.x) == 1 && Mathf.Abs(inputVec.z) == 1) ? 0.7f : 1;
+		
+		if(!isPaused)
+		{
+			//if not paused, face character along input direction
+			RotateTowardsMovementDir();
+		}
 
-		RotateTowardMovementDirection();  
-		GetCameraRelativeMovement();  
+		return inputVec.magnitude;
 	}
 
-	void OnGUI () 
+	void OnGUI()
 	{
-		if (GUI.Button (new Rect (25, 85, 100, 30), "Attack1")) 
+		if(charState == CharacterState.Idle && !isMoving)
 		{
-			animator.SetTrigger("Attack1Trigger");
-
-			if (warrior == Warrior.Brute || warrior == Warrior.Sorceress)  //if character is Brute or Sorceress
-				StartCoroutine (COStunPause(1.2f));
-			else
-				StartCoroutine (COStunPause(.6f));
+			isPaused = false;
+			if(GUI.Button(new Rect(25, 25, 150, 30), "Pickup Box"))
+			{
+				animator.SetTrigger("CarryPickupTrigger");
+				StartCoroutine(COMovePause(1.2f));
+				StartCoroutine(COShowItem("box", .5f));
+				charState = CharacterState.Box;
+			}
+			if(GUI.Button(new Rect(25, 65, 150, 30), "Recieve Box"))
+			{
+				animator.SetTrigger("CarryRecieveTrigger");
+				StartCoroutine(COMovePause(1.2f));
+				StartCoroutine(COShowItem("box", .5f));
+				charState = CharacterState.Box;
+			}
 		}
+		if(charState == CharacterState.Box && !isMoving)
+		{
+			if(GUI.Button(new Rect(25, 25, 150, 30), "Put Down Box"))
+			{
+				animator.SetTrigger("CarryPutdownTrigger");
+				StartCoroutine(COMovePause(1.2f));
+				StartCoroutine(COShowItem("none", .7f));
+				charState = CharacterState.Idle;
+			}
+			if(GUI.Button(new Rect(25, 65, 150, 30), "Give Box"))
+			{
+				animator.SetTrigger("CarryHandoffTrigger");
+				StartCoroutine(COMovePause(1.2f));
+				StartCoroutine(COShowItem("none", .6f));
+				charState = CharacterState.Idle;
+			}
+		}
+	}
+
+	public IEnumerator COMovePause(float pauseTime)
+	{
+		isPaused = true;
+		yield return new WaitForSeconds(pauseTime);
+		isPaused = false;
+	}
+
+	public IEnumerator COChangeCharacterState(float waitTime, CharacterState state)
+	{
+		yield return new WaitForSeconds(waitTime);
+		charState = state;
+	}
+
+	public IEnumerator COShowItem(string item, float waittime)
+	{
+		yield return new WaitForSeconds(waittime);
+		
+		if(item == "none")
+		{
+			box.SetActive(false);
+		}
+		else if(item == "box")
+		{
+			box.SetActive(true);
+		}
+
+		yield return null;
 	}
 }
