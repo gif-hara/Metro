@@ -17,11 +17,32 @@ namespace Metro.CharacterController
 
         private Tweener unAimTweener = null;
 
+        private AnimatorLayer layerInfo = null;
+
         private static class AnimatorParameter
         {
             public static readonly int Move = Animator.StringToHash("Move");
             public static readonly int AimLayer = Animator.StringToHash("Aim Layer");
         }
+
+        private class AnimatorLayer
+        {
+            public static readonly string BaseLayerName = "Base Layer";
+            
+            public static readonly string AimLayerName = "Aim Layer";
+
+            public readonly int BaseLayer;
+            
+            public readonly int AimLayer;
+
+            public AnimatorLayer(Animator animator)
+            {
+                Assert.IsNotNull(animator);
+                this.BaseLayer = animator.GetLayerIndex(BaseLayerName);
+                this.AimLayer = animator.GetLayerIndex(AimLayerName);
+            }
+        }
+        
         
         private void Start()
         {
@@ -36,6 +57,9 @@ namespace Metro.CharacterController
                 this.animator = this.GetComponentInChildren<Animator>();
                 Assert.IsNotNull(this.animator);
             }
+            {
+                this.layerInfo = new AnimatorLayer(this.animator);
+            }
 
             this.locomotion.Velocity
                 .SubscribeWithState(this, (v, _this) =>
@@ -47,8 +71,7 @@ namespace Metro.CharacterController
                 .Where(s => this.isActiveAndEnabled)
                 .SubscribeWithState(this, (s, _this) =>
                 {
-                    var layerIndex = _this.animator.GetLayerIndex("Aim Layer");
-                    _this.animator.SetLayerWeight(layerIndex, 1.0f);
+                    _this.animator.SetLayerWeight(_this.layerInfo.AimLayer, 1.0f);
                     if (_this.unAimTweener != null)
                     {
                         _this.unAimTweener.Kill();
@@ -57,7 +80,7 @@ namespace Metro.CharacterController
                         () => 1.0f,
                         f =>
                     {
-                        _this.animator.SetLayerWeight(layerIndex, f);
+                        _this.animator.SetLayerWeight(_this.layerInfo.AimLayer, f);
                     },
                         0.0f,
                         0.5f)
