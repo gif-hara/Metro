@@ -1,4 +1,5 @@
-﻿using UniRx;
+﻿using Metro.Events.Character;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -16,6 +17,7 @@ namespace Metro.CharacterController
         private static class AnimatorParameter
         {
             public static readonly int Move = Animator.StringToHash("Move");
+            public static readonly int AimLayer = Animator.StringToHash("Aim Layer");
         }
         
         private void Start()
@@ -38,6 +40,15 @@ namespace Metro.CharacterController
                     _this.animator.SetFloat(AnimatorParameter.Move, Mathf.Abs(v.x));
                 })
                 .AddTo(this);
+            this.humanoid.Provider.Receive<StartFire>()
+                .Where(s => this.isActiveAndEnabled)
+                .SubscribeWithState(this, (s, _this) =>
+                {
+                    var layerIndex = _this.animator.GetLayerIndex("Aim Layer");
+                    _this.animator.SetLayerWeight(layerIndex, 1.0f);
+                })
+                .AddTo(this);
+                
         }
     }
 }

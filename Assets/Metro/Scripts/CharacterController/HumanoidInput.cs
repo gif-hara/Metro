@@ -28,6 +28,7 @@ namespace Metro.CharacterController
             UniRxEvent.GlobalBroker.Receive<Tap>()
                 .SubscribeWithState(this, (t, _this) =>
                 {
+                    _this.humanoid.Provider.Publish(StartFire.Get());
                 })
                 .AddTo(this);
         }

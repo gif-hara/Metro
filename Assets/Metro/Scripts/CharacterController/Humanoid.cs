@@ -15,6 +15,9 @@ namespace Metro.CharacterController
         [SerializeField]
         private List<Option> options;
 
+        [SerializeField]
+        private List<Muzzle> muzzles;
+
         public Transform CachedTransform { private set; get; }
         
         public IMessageBroker Provider { private set; get; }
@@ -44,6 +47,17 @@ namespace Metro.CharacterController
                     _this.Locomotion.Move(m.Direction * m.Speed);
                     var angle = m.Direction.x > 0 ? 0.0f : 180.0f;
                     _this.CachedTransform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
+                })
+                .AddTo(this);
+            
+            this.Provider.Receive<StartFire>()
+                .Where(m => this.isActiveAndEnabled)
+                .SubscribeWithState(this, (s, _this) =>
+                {
+                    for (var i = 0; i < _this.muzzles.Count; i++)
+                    {
+                        _this.muzzles[i].Fire();
+                    }
                 })
                 .AddTo(this);
         }
