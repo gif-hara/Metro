@@ -10,10 +10,10 @@ namespace Metro.CharacterController.OptionExtensions
 
         private float angle;
 
-        public override void Created(Drone drone, Option option)
+        public override void Created(Humanoid humanoid, Option option)
         {
-            drone.Provider.Receive<Move>()
-                .Where(m => drone.isActiveAndEnabled)
+            humanoid.Provider.Receive<Move>()
+                .Where(m => humanoid.isActiveAndEnabled)
                 .SubscribeWithState2(this, option, (m, _this, _option) =>
                 {
                     var target = Mathf.Atan2(m.Direction.y, m.Direction.x) * Mathf.Rad2Deg;

@@ -23,21 +23,21 @@ namespace Metro.CharacterController
             this.CachedTransform = this.transform;
         }
 
-        public void Create(Drone drone)
+        public void Create(Humanoid humanoid)
         {
-            var instance = Instantiate(this, drone.CachedTransform);
-            instance.Initialize(drone);
+            var instance = Instantiate(this, humanoid.CachedTransform);
+            instance.Initialize(humanoid);
         }
 
-        private void Initialize(Drone drone)
+        private void Initialize(Humanoid humanoid)
         {
             this.transform.localPosition = Vector3.zero;
             var modelInstance = Instantiate(this.model, this.modelParent);
             modelInstance.transform.localPosition = Vector3.zero;
             modelInstance.transform.localRotation = Quaternion.identity;
 
-            drone.Provider.Receive<StartFire>()
-                .Where(_ => drone.isActiveAndEnabled)
+            humanoid.Provider.Receive<StartFire>()
+                .Where(_ => humanoid.isActiveAndEnabled)
                 .SubscribeWithState(this, (s, _this) =>
                 {
                     _this.muzzle.Fire();
@@ -47,7 +47,7 @@ namespace Metro.CharacterController
             var extensions = this.GetComponents<OptionExtension>();
             for (int i = 0; i < extensions.Length; i++)
             {
-                extensions[i].Created(drone, this);
+                extensions[i].Created(humanoid, this);
             }
         }
     }

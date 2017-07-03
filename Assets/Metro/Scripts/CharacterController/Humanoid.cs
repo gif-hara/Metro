@@ -7,7 +7,7 @@ using UnityEngine.Assertions;
 namespace Metro.CharacterController
 {
     [RequireComponent(typeof(CharacterLocomotion))]
-    public class Drone : MonoBehaviour
+    public class Humanoid : MonoBehaviour
     {
         [SerializeField]
         private GameObject model;
