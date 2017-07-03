@@ -42,6 +42,8 @@ namespace Metro.CharacterController
                 .SubscribeWithState(this, (m, _this) =>
                 {
                     _this.Locomotion.Move(m.Direction * m.Speed);
+                    var angle = m.Direction.x > 0 ? 0.0f : 180.0f;
+                    _this.CachedTransform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
                 })
                 .AddTo(this);
         }
