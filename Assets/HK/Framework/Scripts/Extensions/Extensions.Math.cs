@@ -78,7 +78,6 @@ namespace HK.Framework.Extensions
 			{
 				var min = (splitAngle * i) - (fixedAngle * i);
 				var max = min + splitAngle;
-				Debug.Log(new{i = i, min = min, max = max, angle = angle});
 				if (angle >= min && angle < max)
 				{
 					return i;
