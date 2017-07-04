@@ -61,10 +61,10 @@ namespace HK.Framework.Extensions
 		/// <summary>
 		/// <paramref name="angle"/>を<paramref name="number"/>で分割した値を返す
 		/// </summary>
-		/// <param name="angle"></param>
-		/// <param name="number"></param>
-		/// <returns></returns>
-		public static int Digitalize(this float angle, int number)
+		/// <remarks>
+		/// <paramref name="applyFixedAngle"/>が<c>true</c>の場合は上下方向が軸になります
+		/// </remarks>
+		public static int Digitalize(this float angle, int number, bool applyFixedAngle = true)
 		{
 			Assert.AreNotEqual(number, 0);
 			if (number == 1)
@@ -73,11 +73,12 @@ namespace HK.Framework.Extensions
 			}
 			
 			var splitAngle = 360 / number;
-			var fixedAngle = splitAngle / 2;
+			var fixedAngle = applyFixedAngle ? 0.0f : (splitAngle / 2.0f);
 			for (var i = 1; i < number; i++)
 			{
-				var min = fixedAngle * i;
-				var max = min + splitAngle * i;
+				var min = (splitAngle * i) - (fixedAngle * i);
+				var max = min + splitAngle;
+				Debug.Log(new{i = i, min = min, max = max, angle = angle});
 				if (angle >= min && angle < max)
 				{
 					return i;
