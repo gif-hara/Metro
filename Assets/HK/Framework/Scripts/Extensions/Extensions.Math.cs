@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace HK.Framework.Extensions
 {
@@ -55,6 +56,35 @@ namespace HK.Framework.Extensions
 		public static float ZSign(float a)
 		{
 			return IsEqual(a, 0) ? 0 : Mathf.Sign(a);
+		}
+
+		/// <summary>
+		/// <paramref name="angle"/>を<paramref name="number"/>で分割した値を返す
+		/// </summary>
+		/// <param name="angle"></param>
+		/// <param name="number"></param>
+		/// <returns></returns>
+		public static int Digitalize(this float angle, int number)
+		{
+			Assert.AreNotEqual(number, 0);
+			if (number == 1)
+			{
+				return 0;
+			}
+			
+			var splitAngle = 360 / number;
+			var fixedAngle = splitAngle / 2;
+			for (var i = 1; i < number; i++)
+			{
+				var min = fixedAngle * i;
+				var max = min + splitAngle * i;
+				if (angle >= min && angle < max)
+				{
+					return i;
+				}
+			}
+
+			return 0;
 		}
 	}
 }
