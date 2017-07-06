@@ -59,6 +59,29 @@ namespace HK.Framework.Extensions
 		}
 
 		/// <summary>
+		/// 方向から角度を返す
+		/// </summary>
+		/// <remarks>
+		/// <see cref="Vector2.right"/>で0
+		/// <see cref="Vector2.up"/>で90
+		/// <see cref="Vector2.left"/>で180
+		/// <see cref="Vector2.down"/>で270
+		/// </remarks>
+		public static float Angle(this Vector2 direction)
+		{
+			return Mathf.Repeat(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg, 360.0f);
+		}
+
+		/// <summary>
+		/// 角度から方向を返す
+		/// </summary>
+		public static Vector2 Direction(this float angle)
+		{
+			angle = angle * Mathf.Deg2Rad;
+			return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+		}
+
+		/// <summary>
 		/// <paramref name="angle"/>を<paramref name="number"/>で分割した値を返す
 		/// </summary>
 		/// <remarks>
@@ -77,7 +100,7 @@ namespace HK.Framework.Extensions
 			for (var i = 1; i < number; i++)
 			{
 				var min = (splitAngle * i) - (fixedAngle * i);
-				var max = min + splitAngle;
+				var max = min + splitAngle ;
 				if (angle >= min && angle < max)
 				{
 					return i;
