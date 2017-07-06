@@ -1,4 +1,5 @@
 ﻿using HK.Framework.EventSystems;
+using HK.Framework.Extensions;
 using UnityEngine;
 
 namespace Metro.Events.InputSystems
@@ -17,11 +18,6 @@ namespace Metro.Events.InputSystems
     public sealed class Swipe : UniRxEvent<Swipe, Vector2>
     {
         public Vector2 Normalize { get { return this.param1; } }
-        
-        /// <summary>
-        /// 入力方向の角度を返す
-        /// </summary>
-        public float Angle { get { return Mathf.Atan2(this.Normalize.y, this.Normalize.x) * Mathf.Rad2Deg; } }
     }
 
     /// <summary>
