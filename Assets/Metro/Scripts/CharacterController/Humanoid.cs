@@ -18,6 +18,9 @@ namespace Metro.CharacterController
         [SerializeField]
         private List<Muzzle> muzzles;
 
+        [SerializeField]
+        private float jumpPower;
+
         public Transform CachedTransform { private set; get; }
         
         public IMessageBroker Provider { private set; get; }
@@ -58,6 +61,14 @@ namespace Metro.CharacterController
                     {
                         _this.muzzles[i].Fire();
                     }
+                })
+                .AddTo(this);
+
+            this.Provider.Receive<Jump>()
+                .Where(m => this.isActiveAndEnabled)
+                .SubscribeWithState(this, (j, _this) =>
+                {
+                    _this.Locomotion.AddForce(j.Direction * this.jumpPower);
                 })
                 .AddTo(this);
         }
