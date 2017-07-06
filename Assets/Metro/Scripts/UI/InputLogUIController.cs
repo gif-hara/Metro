@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using HK.Framework.EventSystems;
+using HK.Framework.Extensions;
 using HK.Framework.Text;
 using Metro.Events.InputSystems;
 using UnityEngine;
@@ -44,7 +45,7 @@ namespace Metro.UI
                     .SubscribeWithState(this, (t, _this) => _this.AddText(_this.CreateTapMessage(t.ScreenPosition)))
                     .AddTo(this);
                 UniRxEvent.GlobalBroker.Receive<Swipe>()
-                    .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateSwipeMessage(s.Angle)))
+                    .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateSwipeMessage(s.Normalize.Angle())))
                     .AddTo(this);
                 UniRxEvent.GlobalBroker.Receive<Flick>()
                     .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateFlickMessage(s.Angle)))
