@@ -36,5 +36,10 @@ namespace Metro.CharacterController
         {
             this.velocity.Value += velocity;
         }
+
+        public void AddForce(Vector2 force)
+        {
+            this.cachedRigidbody2D.AddForce(force);
+        }
     }
 }
