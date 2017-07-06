@@ -1,8 +1,10 @@
 ﻿using HK.Framework.EventSystems;
+using HK.Framework.Extensions;
 using Metro.Events.Character;
 using Metro.Events.InputSystems;
 using UnityEngine;
 using UniRx;
+using UnityEngine.Assertions.Must;
 
 namespace Metro.CharacterController
 {
@@ -11,6 +13,9 @@ namespace Metro.CharacterController
     {
         [SerializeField]
         private float speed;
+
+        [SerializeField]
+        private float jumpRange;
         
         private Humanoid humanoid;
         
@@ -31,6 +36,18 @@ namespace Metro.CharacterController
                     _this.humanoid.Provider.Publish(StartFire.Get());
                 })
                 .AddTo(this);
+            UniRxEvent.GlobalBroker.Receive<Flick>()
+                .Where(f => this.CanJump(f.Normalize.Angle()))
+                .SubscribeWithState(this, (f, _this) =>
+                {
+                    _this.humanoid.Provider.Publish(Jump.Get(Vector2.up));
+                })
+                .AddTo(this);
+        }
+
+        private bool CanJump(float angle)
+        {
+            return angle > (90 - this.jumpRange) && angle < (90 + this.jumpRange);
         }
     }
 }
