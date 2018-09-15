@@ -61,6 +61,16 @@ namespace HK.Framework.Text
 			{
 				return this.target.Format(this, args);
 			}
+
+			public override int GetHashCode()
+			{
+				return this.ToString().GetHashCode();
+			}
+
+			public bool IsValid
+			{
+				get { return !string.IsNullOrEmpty(this.guid); }
+			}
 		}
 
 		[System.Serializable]

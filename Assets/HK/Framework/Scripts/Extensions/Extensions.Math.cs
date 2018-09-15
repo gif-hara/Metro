@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace HK.Framework.Extensions
 {
@@ -56,58 +55,6 @@ namespace HK.Framework.Extensions
 		public static float ZSign(float a)
 		{
 			return IsEqual(a, 0) ? 0 : Mathf.Sign(a);
-		}
-
-		/// <summary>
-		/// 方向から角度を返す
-		/// </summary>
-		/// <remarks>
-		/// <see cref="Vector2.right"/>で0
-		/// <see cref="Vector2.up"/>で90
-		/// <see cref="Vector2.left"/>で180
-		/// <see cref="Vector2.down"/>で270
-		/// </remarks>
-		public static float Angle(this Vector2 direction)
-		{
-			return Mathf.Repeat(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg, 360.0f);
-		}
-
-		/// <summary>
-		/// 角度から方向を返す
-		/// </summary>
-		public static Vector2 Direction(this float angle)
-		{
-			angle = angle * Mathf.Deg2Rad;
-			return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-		}
-
-		/// <summary>
-		/// <paramref name="angle"/>を<paramref name="number"/>で分割した値を返す
-		/// </summary>
-		/// <remarks>
-		/// <paramref name="applyFixedAngle"/>が<c>true</c>の場合は上下方向が軸になります
-		/// </remarks>
-		public static int Digitalize(this float angle, int number, bool applyFixedAngle = true)
-		{
-			Assert.AreNotEqual(number, 0);
-			if (number == 1)
-			{
-				return 0;
-			}
-			
-			var splitAngle = 360 / number;
-			var fixedAngle = applyFixedAngle ? 0.0f : (splitAngle / 2.0f);
-			for (var i = 1; i < number; i++)
-			{
-				var min = (splitAngle * i) - (fixedAngle * i);
-				var max = min + splitAngle ;
-				if (angle >= min && angle < max)
-				{
-					return i;
-				}
-			}
-
-			return 0;
 		}
 	}
 }
