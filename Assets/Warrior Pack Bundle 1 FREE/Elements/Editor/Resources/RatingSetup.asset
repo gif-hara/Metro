@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b84ee850199abbc4d92cd6a0d0c4a1ca, type: 3}
   m_Name: RatingSetup
   m_EditorClassIdentifier: 
-  active: 1
-  counter: 7
-  lastCheck: 416408.433716875
+  active: 0
+  counter: 0
+  lastCheck: 426951.77313991275
