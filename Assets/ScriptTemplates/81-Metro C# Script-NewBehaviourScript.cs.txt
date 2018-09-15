@@ -1,0 +1,12 @@
+using UnityEngine;
+using UnityEngine.Assertions;
+
+namespace Metro
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class #SCRIPTNAME# : MonoBehaviour
+    {
+    }
+}
