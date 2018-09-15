@@ -33,13 +33,6 @@ namespace Metro.CharacterController
             Broker.Global.Receive<Tap>()
                 .SubscribeWithState(this, (t, _this) =>
                 {
-                    _this.humanoid.Provider.Publish(StartFire.Get());
-                })
-                .AddTo(this);
-            Broker.Global.Receive<Flick>()
-                .Where(f => this.CanJump(f.Normalize.Angle()))
-                .SubscribeWithState(this, (f, _this) =>
-                {
                     _this.humanoid.Provider.Publish(Jump.Get(Vector2.up));
                 })
                 .AddTo(this);
