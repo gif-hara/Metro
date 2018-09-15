@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Metro.Events.Character
 {
-    public sealed class Move : UniRxEvent<Move, Vector2, float>
+    public sealed class Move : Message<Move, Vector2, float>
     {
         public Vector2 Direction{ get { return this.param1; } }
         

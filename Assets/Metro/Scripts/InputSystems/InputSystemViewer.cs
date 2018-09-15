@@ -90,22 +90,22 @@ namespace Metro.InputSystems
                     })
                 );
                         
-            UniRxEvent.GlobalBroker.Publish(Events.InputSystems.PointerDown.Get(screenPosition));
+            Broker.Global.Publish(Events.InputSystems.PointerDown.Get(screenPosition));
         }
 
         public void PointerUp(Vector2 screenPosition)
         {
             if (this.CanPublishTap(screenPosition))
             {
-                UniRxEvent.GlobalBroker.Publish(Tap.Get(screenPosition));
+                Broker.Global.Publish(Tap.Get(screenPosition));
             }
             if (this.CanPublishFlick(screenPosition))
             {
                 var normalize = (screenPosition - this.flickFromPosition).normalized;
-                UniRxEvent.GlobalBroker.Publish(Flick.Get(normalize));
+                Broker.Global.Publish(Flick.Get(normalize));
             }
             this.SetAlpha(0.0f);
-            UniRxEvent.GlobalBroker.Publish(Events.InputSystems.PointerUp.Get(screenPosition));
+            Broker.Global.Publish(Events.InputSystems.PointerUp.Get(screenPosition));
 
             this.pointerEvents.Clear();
         }
@@ -150,7 +150,7 @@ namespace Metro.InputSystems
             return updateStream
                 .SubscribeWithState(this, (_, _this) =>
                 {
-                    UniRxEvent.GlobalBroker.Publish(Swipe.Get((_this.currentPosition - _this.beginPosition).normalized));
+                    Broker.Global.Publish(Swipe.Get((_this.currentPosition - _this.beginPosition).normalized));
                 })
                 .AddTo(this);
         }

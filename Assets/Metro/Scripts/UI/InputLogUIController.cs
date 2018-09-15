@@ -41,13 +41,13 @@ namespace Metro.UI
                 Assert.IsNotNull(this.cachedText);
             }
             {
-                UniRxEvent.GlobalBroker.Receive<Tap>()
+                Broker.Global.Receive<Tap>()
                     .SubscribeWithState(this, (t, _this) => _this.AddText(_this.CreateTapMessage(t.ScreenPosition)))
                     .AddTo(this);
-                UniRxEvent.GlobalBroker.Receive<Swipe>()
+                Broker.Global.Receive<Swipe>()
                     .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateSwipeMessage(s.Normalize.Angle())))
                     .AddTo(this);
-                UniRxEvent.GlobalBroker.Receive<Flick>()
+                Broker.Global.Receive<Flick>()
                     .SubscribeWithState(this, (s, _this) => _this.AddText(_this.CreateFlickMessage(s.Angle)))
                     .AddTo(this);
             }

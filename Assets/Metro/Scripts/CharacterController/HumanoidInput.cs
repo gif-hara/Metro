@@ -23,20 +23,20 @@ namespace Metro.CharacterController
         {
             this.humanoid = this.GetComponent<Humanoid>();
             
-            UniRxEvent.GlobalBroker.Receive<Swipe>()
+            Broker.Global.Receive<Swipe>()
                 .SubscribeWithState(this, (s, _this) =>
                 {
                     var velocity = Vector2.right * Mathf.Sign(s.Normalize.x);
                     _this.humanoid.Provider.Publish(Move.Get(velocity, _this.speed));
                 })
                 .AddTo(this);
-            UniRxEvent.GlobalBroker.Receive<Tap>()
+            Broker.Global.Receive<Tap>()
                 .SubscribeWithState(this, (t, _this) =>
                 {
                     _this.humanoid.Provider.Publish(StartFire.Get());
                 })
                 .AddTo(this);
-            UniRxEvent.GlobalBroker.Receive<Flick>()
+            Broker.Global.Receive<Flick>()
                 .Where(f => this.CanJump(f.Normalize.Angle()))
                 .SubscribeWithState(this, (f, _this) =>
                 {
