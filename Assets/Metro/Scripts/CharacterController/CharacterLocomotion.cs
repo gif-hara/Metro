@@ -8,9 +8,17 @@ namespace Metro.CharacterController
     [RequireComponent(typeof(Rigidbody2D))]
     public class CharacterLocomotion : MonoBehaviour
     {
+        [SerializeField]
+        private float gravityScale;
+
+        [SerializeField]
+        private ContactFilter2D contactFilter;
+
         private Rigidbody2D cachedRigidbody2D;
 
         private ReactiveProperty<Vector2> velocity = new ReactiveProperty<Vector2>();
+
+        private ReactiveProperty<Vector2> force = new ReactiveProperty<Vector2>();
 
         public IReadOnlyReactiveProperty<Vector2> Velocity
         {
@@ -22,13 +30,28 @@ namespace Metro.CharacterController
             this.cachedRigidbody2D = this.GetComponent<Rigidbody2D>();
             Assert.IsNotNull(this.cachedRigidbody2D);
 
-            this.UpdateAsObservable()
+            var fixedUpdate = this.FixedUpdateAsObservable();
+            fixedUpdate
                 .Where(_ => this.isActiveAndEnabled)
-                .Where(_ => this.velocity.Value.sqrMagnitude > 0.0f)
                 .SubscribeWithState(this, (_, _this) =>
                 {
-                    this.cachedRigidbody2D.position += this.velocity.Value * Time.deltaTime;
-                    this.velocity.Value = Vector3.zero;
+                    var r = _this.cachedRigidbody2D;
+                    var v = Vector2.zero;
+                    if(_this.velocity.Value.sqrMagnitude > 0.0f)
+                    {
+                        v += _this.velocity.Value;
+                        _this.velocity.Value = Vector3.zero;
+                    }
+                    if(_this.force.Value.sqrMagnitude > 0.0f)
+                    {
+                        v += _this.force.Value;
+                    }
+                    _this.force.Value += (Physics2D.gravity * _this.gravityScale) * Time.deltaTime;
+                    if(_this.force.Value.y < 0.0f && _this.cachedRigidbody2D.IsTouching(_this.contactFilter))
+                    {
+                        _this.force.Value = Vector2.zero;
+                    }
+                    r.MovePosition(r.position + v * Time.deltaTime);
                 });
         }
 
@@ -39,7 +62,7 @@ namespace Metro.CharacterController
 
         public void AddForce(Vector2 force)
         {
-            this.cachedRigidbody2D.AddForce(force);
+            this.force.Value = force;
         }
     }
 }
