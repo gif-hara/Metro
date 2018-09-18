@@ -13,11 +13,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Stage
+  - Player
+  - Enemy
+  - Player/Search
+  - Enemy/Search
   - 
   - 
   - 
